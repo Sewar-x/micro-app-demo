@@ -1,6 +1,6 @@
 node_modules
 
-main-app/**/node_modules
-old-app/**/node_modules
-sub-app/**/node_modules
+main-app/node_modules
 */**/node_modules
+main-app/dist
+*/**/dist

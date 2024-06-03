@@ -17,12 +17,12 @@ const router = createRouter({
     {
       path: '/react',
       name: 'react-app',
-      component: () => import('../views/ReactApp.vue')
+      component: () => import('../AppContainer/ReactApp.vue')
     },
     {
       path: '/vue',
       name: 'vue-app',
-      component: () => import('../views/VueApp.vue')
+      component: () => import('../AppContainer/VueApp.vue')
     }
   ]
 })

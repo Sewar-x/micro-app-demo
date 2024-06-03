@@ -1,0 +1,19 @@
+{
+  "name": "micro-app-refact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "packages/*",
+    "main-app"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@micro-zoe/micro-app": "^1.0.0-rc.5"
+  }
+}

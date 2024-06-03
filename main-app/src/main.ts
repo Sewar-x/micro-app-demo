@@ -1,9 +1,14 @@
 import './assets/main.css'
+// 引入windi css
+import '@/plugins/unocss'
+// 引入全局样式
+import '@/styles/index.less'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import microApp from '@micro-zoe/micro-app'
+
 
 microApp.start({
     lifeCycles: {

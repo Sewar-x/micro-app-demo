@@ -4,21 +4,32 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build --force",
+    "i": "pnpm install",
+    "dev": "pnpm vite --mode base",
+    "ts:check": "pnpm vue-tsc --noEmit --skipLibCheck",
+    "build:pro": "pnpm vite build --mode production",
+    "build:dev": "pnpm vite build --mode dev",
+    "build:test": "pnpm vite build --mode test",
+    "serve:pro": "pnpm vite preview --mode production",
+    "serve:dev": "pnpm vite preview --mode dev",
+    "serve:test": "pnpm vite preview --mode test",
+    "npm:check": "pnpx npm-check-updates -u",
+    "clean": "pnpx rimraf node_modules",
+    "clean:cache": "pnpx rimraf node_modules/.cache",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
     "@micro-zoe/micro-app": "1.0.0-rc.5",
+    "element-plus": "^2.7.4",
+    "less": "^4.2.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
+    "vue-i18n": "^9.13.1",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.12.5",
@@ -31,9 +42,16 @@
     "eslint-plugin-vue": "^9.23.0",
     "npm-run-all2": "^6.1.2",
     "prettier": "^3.2.5",
+    "rollup-plugin-visualizer": "^5.12.0",
     "typescript": "~5.4.0",
-    "vite": "^5.2.8",
+    "unocss": "^0.60.4",
+    "vite": "^5.2.12",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-mock": "^3.0.2",
+    "vite-plugin-progress": "^0.0.7",
+    "vite-plugin-style-import": "^2.0.0",
+    "vite-plugin-url-copy": "^1.1.4",
     "vite-plugin-vue-devtools": "^7.0.25",
-    "vue-tsc": "^2.0.11"
+    "vue-tsc": "^2.0.19"
   }
 }

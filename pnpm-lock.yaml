@@ -1,0 +1,13 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@micro-zoe/micro-app': ^1.0.0-rc.5
+
+devDependencies:
+  '@micro-zoe/micro-app': 1.0.0-rc.5
+
+packages:
+
+  /@micro-zoe/micro-app/1.0.0-rc.5:
+    resolution: {integrity: sha512-Z7Qkp1ZxFc04UYkR6UYPorg/VgACvE0E0Y8tyOKfR9AZmvoSNPdv4TpBFv3FRoYcvMlXW8TnEXhxL1VmCbL+2w==}
+    dev: true
