@@ -1,60 +1,34 @@
+import './assets/main.css'
+// 引入windi css
+import '@/plugins/unocss'
 // 引入全局样式
 import '@/styles/index.less'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+import router from './router'
+import microApp from '@micro-zoe/micro-app'
 
-import {
-  initVue,
-  initStore,
-  initRoute,
-  initElementPlus,
-  initXWElementPlus,
-  initDefineComponent,
-  initI18n,
-  initMicroApp,
-  initXWPermission,
-  initUnocss
-} from '@/plugins/init'
-const {
-  VITE_MULTIPLE_LANGUAGES,
-  VITE_USE_MICRO_APP,
-  VITE_USE_XW_UI_ELEMENT_PLUS,
-  VITE_USE_XW_UI_PERMISSION,
-  VITE_USE_UNOCSS
-} = import.meta.env
 
-async function bootstrap() {
-  let router = null
-  let store = null
-  const app = await initVue()
-  // 初始化 elementPlus
-  await initElementPlus(app)
-  // 初始化 store
-  store = await initStore(app)
-  // 使用 unocss
-  if (VITE_USE_UNOCSS === 'true') {
-    await initUnocss(app)
-  }
-  // 使用国际化 i18n
-  if (VITE_MULTIPLE_LANGUAGES === 'true') {
-    await initI18n(app)
-  }
-  // 使用 Route
-  router = await initRoute(app)
-  // 使用 微前端框架 micro-app
-  if (VITE_USE_MICRO_APP === 'true') {
-    await initMicroApp(app, router)
-  }
-  // 使用 路由权限控制
-  if (VITE_USE_XW_UI_PERMISSION === 'true') {
-    await initXWPermission(app)
-  }
-  // 加载自定义组件
-  await initDefineComponent(app)
-  // 引入 XW-UI Element Plus
-  if (VITE_USE_XW_UI_ELEMENT_PLUS === 'true') {
-    await initXWElementPlus(app)
-  }
-  // 挂载组件
-  app.mount('#app')
-}
+microApp.start({
+    lifeCycles: {
+        created() {
+            console.log('created 全局监听')
+        },
+        beforemount() {
+            console.log('beforemount 全局监听')
+        },
+        mounted() {
+            console.log('mounted 全局监听')
+        },
+        unmount() {
+            console.log('unmount 全局监听')
+        },
+        error() {
+            console.log('error 全局监听')
+        }
+    }
 
-bootstrap()
+})
+const app = createApp(App)
+app.use(createPinia()).use(router).mount('#app')

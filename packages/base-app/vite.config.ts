@@ -1,38 +1,97 @@
+import { resolve } from 'path'
 import { fileURLToPath, URL } from 'node:url'
 import type { UserConfig, ConfigEnv } from 'vite'
 import { loadEnv } from 'vite'
-import { wrapperEnv, buildAssetsFile, buildChunkFile } from "./build/utils";
-import { createProxy } from "./build/vite/proxy";
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import ServerUrlCopy from 'vite-plugin-url-copy' // shell 显示开发地址和预览二维码
+import progress from 'vite-plugin-progress' // vite 打包进度插件
+import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import' // element plus 按需引入
+import EslintPlugin from 'vite-plugin-eslint' // vite eslint 格式化插件
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite' // i18n 预编译
+import { viteMockServe } from 'vite-plugin-mock' // mock 服务
+import UnoCSS from 'unocss/vite'
 import { visualizer } from 'rollup-plugin-visualizer' // vite打包视图分析
-import { createVitePlugin } from "./build/vite/plugin";
+
 
 // https://vitejs.dev/config/
-const url = import.meta.url;
-// process.cwd()方法返回Node.js进程的当前工作目录。
 const root = process.cwd()
 
+function pathResolve(dir: string) {
+  return resolve(root, '.', dir)
+}
+// https://vitejs.dev/config/
 export default ({ command, mode }: ConfigEnv): UserConfig => {
-
-  // 加载 root 中的 .env 文件。根据执行命令的环境类型获取变量
-  const env = loadEnv(mode, root);
-  // loadEnv读取的布尔类型是一个字符串。这个函数可以转换为布尔类型
-  const viteEnv = wrapperEnv(env);
-  const isBuild = command === "build";
-  const {
-    VITE_BASE_PATH,
-    VITE_PROXY,
-    VITE_DROP_CONSOLE,
-    VITE_DROP_DEBUGGER,
-    VITE_OUT_DIR,
-    VITE_ASSETS_DIR,
-    VITE_SOURCEMAP,
-    VITE_USE_BUNDLE_ANALYZER,
-    VITE_USE_CSS_SPLIT,
-    VITE_DEV_PORT,
-  } = viteEnv;
+  let env = {} as any
+  const isBuild = command === 'build'
+  // 根据构建脚本中环境变量参数提取环境变量
+  if (!isBuild) {
+    env = loadEnv(process.argv[3] === '--mode' ? process.argv[4] : process.argv[3], root)
+  } else {
+    env = loadEnv(mode, root)
+  }
   return {
-    base: VITE_BASE_PATH,
-    plugins: createVitePlugin(viteEnv, isBuild),
+    base: env.VITE_BASE_PATH,
+    plugins: [
+      vue({
+        script: {
+          // 开启defineModel
+          defineModel: true
+        },
+        template: {
+          compilerOptions: {
+            isCustomElement: tag => /^micro-app/.test(tag)
+          }
+        }
+      }),
+      vueJsx(),
+      ServerUrlCopy(),
+      progress(),
+      // 是否全量引入 element plus
+      env.VITE_USE_ALL_ELEMENT_PLUS_STYLE === 'false'
+        ? createStyleImportPlugin({
+          resolves: [ElementPlusResolve()],
+          libs: [
+            {
+              libraryName: 'element-plus',
+              esModule: true,
+              resolveStyle: (name) => {
+                if (name === 'click-outside') {
+                  return ''
+                }
+                return `element-plus/es/components/${name.replace(/^el-/, '')}/style/css`
+              }
+            }
+          ]
+        })
+        : undefined,
+      // eslint 格式化
+      EslintPlugin({
+        cache: false,
+        include: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'] // 检查的文件
+      }),
+      // i18n 预编译
+      VueI18nPlugin({
+        runtimeOnly: true,
+        compositionOnly: true,
+        include: [resolve(__dirname, 'src/locales/**')]
+      }),
+      // 是否开启 Mock 服务
+      env.VITE_USE_MOCK === 'true'
+        ? viteMockServe({
+          ignore: /^\_/,
+          mockPath: 'mock',
+          localEnabled: !isBuild,
+          prodEnabled: isBuild,
+          injectCode: `
+          import { setupProdMockServer } from '../mock/_createProductionServer'
+
+          setupProdMockServer()
+          `
+        })
+        : undefined,
+      UnoCSS()
+    ],
     // css 配置
     css: {
       preprocessorOptions: {
@@ -45,55 +104,37 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
     // 构建选项
     esbuild: {
-      pure: VITE_DROP_CONSOLE ? ['console.log'] : undefined,
-      drop: VITE_DROP_DEBUGGER ? ['debugger'] : undefined
+      pure: env.VITE_DROP_CONSOLE === 'true' ? ['console.log'] : undefined,
+      drop: env.VITE_DROP_DEBUGGER === 'true' ? ['debugger'] : undefined
     },
     resolve: {
       alias: {
-        "@": fileURLToPath(new URL("./src", url)), // 源文件目录别名
-        "#": fileURLToPath(new URL("./types", url)), // 类型定义文件目录别名
-        $locale: fileURLToPath(new URL("./src/plugins/locales/setupLocale.ts", url)), // 多语言翻译函数别名
-        $store: fileURLToPath(new URL("./src/stores/modules", url)), // Store 文件别名
-        $styleVariable: fileURLToPath(new URL("./src/style/variable.module.less", url)), // 全局样式文件别名
-      },
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
     },
     build: {
-      target: "esnext",
-      outDir: VITE_OUT_DIR || 'dist',
-      sourcemap: VITE_SOURCEMAP,
+      target: 'es2015',
+      outDir: env.VITE_OUT_DIR || 'dist',
+      sourcemap: env.VITE_SOURCEMAP === 'true',
       // brotliSize: false,
       rollupOptions: {
-        plugins: VITE_USE_BUNDLE_ANALYZER? [visualizer()] : undefined,
+        plugins: env.VITE_USE_BUNDLE_ANALYZER === 'true' ? [visualizer()] : undefined,
         // 拆包
         output: {
-          chunkFileNames: (chunkInfo: any) => buildChunkFile(chunkInfo, VITE_ASSETS_DIR),
-          entryFileNames: "[name]-[hash].js",
-          assetFileNames: (chunkInfo: any) => buildAssetsFile(chunkInfo, VITE_ASSETS_DIR),
           manualChunks: {
             'vue-chunks': ['vue', 'vue-router', 'pinia', 'vue-i18n'],
             'element-plus': ['element-plus'],
           }
         }
       },
-      minify: "terser",
-      terserOptions: {
-        compress: {
-          keep_infinity: true,
-          // Used to delete console in production environment
-          drop_console: VITE_DROP_CONSOLE,
-        },
-      },
-      cssCodeSplit: VITE_USE_CSS_SPLIT
+      cssCodeSplit: !(env.VITE_USE_CSS_SPLIT === 'false')
     },
     server: {
-      port: VITE_DEV_PORT, // 自定义端口号  
+      port: 1000, // 自定义端口号  
       fs: {
         strict: false
       },
       open: true,
-      cors: true,
-      hmr: true, // 开启热更新
-      proxy: createProxy(VITE_PROXY),
     },
 
     optimizeDeps: {

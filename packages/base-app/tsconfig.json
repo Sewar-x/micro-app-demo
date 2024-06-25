@@ -1,72 +1,11 @@
 {
-  "compileOnSave": true, //设置保存文件的时候自动编译
-  "extends": "@vue/tsconfig/tsconfig.dom.json", //引入其他配置文件，继承配置
-  "exclude": [
-    "node_modules",
-    "dist"
-  ], //指定编译器需要排除的文件或文件夹
-  "include": [
-    //指定编译需要编译的文件或目录
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.vue",
-    "types/**/*.d.ts",
-    "types/**/*.ts",
-    "build/**/*.ts",
-    "build/**/*.d.ts",
-    "deploy/**/*.ts",
-    "deploy/**/*.d.ts",
-    "vite.config.*",
-    "mock/**/*.ts"
-  ],
-  "compilerOptions": {
-    //配置编译选项
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "jsxImportSource": "vue",
-    "lib": ["esnext", "dom"],
-    "baseUrl": "./",
-    "allowJs": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "strictFunctionTypes": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "paths": {
-      // 路径映射，相对于baseUrl
-      "@/*": [
-        "./src/*"
-      ],
-      "#/*": [
-        "./types/*"
-      ],
-      "$locale": [
-        "src/plugins/plugins/locales/setupLocale.ts"
-      ],
-      "$store/*": [
-        "./src/stores/modules/*"
-      ],
-      "$styleVariable": [
-        "./src/style/variable.module.less"
-      ]
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
     },
-    // "suppressImplicitAnyIndexErrors": true,
-    "types": [
-      "node",
-      "vite/client",
-      "vite/client",
-      "element-plus/global",
-      "vite-plugin-svg-icons/client"
-    ] //默认所有可见的”@types“包会在编译过程中被包含进来。 node_modules/@types文件夹下以及它们子文件夹下的所有包都是可见的；如果指定了types，只有被列出来的包才会被包含进来
-  }
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
 }
