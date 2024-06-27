@@ -5,7 +5,7 @@ export default {
   path: '/vue-app',
   name: 'vueApp',
   component: Layout,
-  order: 3,
+  order: 4,
   hidden: false,
   redirect: '/vue-app/vue-app-home',
   meta: {

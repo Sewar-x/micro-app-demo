@@ -5,7 +5,7 @@ export default {
   path: '/vue-admin-app',
   name: 'vueAdminApp',
   component: Layout,
-  order: 4,
+  order: 3,
   hidden: false,
   redirect: '/vue-admin-app/vue-admin-app-home',
   meta: {

@@ -1,8 +1,5 @@
 <template>
   <LayoutMenu :options="options" :class="[`${prefixCls}`]">
-    <template #sideHeader>
-      <img :class="[`${prefixCls}-logo`]" :src="Logo" />
-    </template>
     <template #topFooter>
       <div :class="[`${prefixCls}-locales`]" v-if="VITE_MULTIPLE_LANGUAGES === 'true'">
         <LocalePicker :showText="true" />
@@ -37,10 +34,6 @@ const options = {
 <style scoped lang="less">
 @prefix-cls: ~"@{adminNamespace}-layout";
 .@{prefix-cls} {
-  &-logo {
-    height: 60px;
-  }
-
   &-locales {
     position: fixed;
     right: 25px;

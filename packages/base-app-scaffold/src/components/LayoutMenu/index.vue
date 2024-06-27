@@ -1,7 +1,9 @@
 <template>
   <LayoutMenu :options="options" :class="[`${prefixCls}`]">
-    <template #sideHeader>
-      <img :class="[`${prefixCls}-logo`]" :src="Logo" />
+    <template #topHeader>
+      <div :class="[`${prefixCls}-logo-container`]">
+        <img :class="[`${prefixCls}-logo`]" :src="Logo" />
+      </div>
     </template>
     <template #topFooter>
       <div :class="[`${prefixCls}-locales`]" v-if="VITE_MULTIPLE_LANGUAGES === 'true'">
@@ -37,6 +39,10 @@ const options = {
 <style scoped lang="less">
 @prefix-cls: ~"@{adminNamespace}-layout";
 .@{prefix-cls} {
+  &-logo-container {
+    height: 60px;
+    width: 180px;
+  }
   &-logo {
     height: 60px;
   }
@@ -46,6 +52,10 @@ const options = {
     right: 25px;
     top: 25px;
     height: 20px;
+  }
+
+  :deep(.layout-content-main) {
+    padding: 0;
   }
 }
 </style>

@@ -8,12 +8,9 @@ import ProjectSetting from '@/settings/projectSetting'
  * @returns
  */
 export function IsMicroApp(): boolean {
-  if (import.meta?.env) {
-    const { VITE_USE_MICRO_APP } = import.meta.env
-    return VITE_USE_MICRO_APP === 'true'
-  } else {
-    return window.__MICRO_APP_ENVIRONMENT__ || false
-  }
+  const { VITE_BASE_MICRO_APP } = import.meta.env
+  const isBaseApp = VITE_BASE_MICRO_APP === 'true'
+  return isBaseApp ? true : window.__MICRO_APP_ENVIRONMENT__ || false
 }
 
 /**
@@ -21,11 +18,7 @@ export function IsMicroApp(): boolean {
  * @returns
  */
 export function IsBaseApp(): boolean {
-  if (!IsMicroApp()) {
-    return true
-  }
-  console.log('========当前应用是什么应用==========', window.__MICRO_APP_BASE_APPLICATION__)
-  return (window && window.__MICRO_APP_BASE_APPLICATION__) || true
+  return import.meta?.env.VITE_BASE_MICRO_APP === 'true'
 }
 
 /**

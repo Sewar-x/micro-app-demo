@@ -5,7 +5,7 @@ export default {
   path: '/react-app',
   name: 'reactApp',
   component: Layout,
-  order: 3,
+  order: 5,
   hidden: false,
   redirect: '/react-app/react-app-home',
   meta: {
