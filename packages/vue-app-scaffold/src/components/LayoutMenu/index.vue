@@ -1,5 +1,8 @@
 <template>
   <LayoutMenu :options="options" :class="[`${prefixCls}`]">
+    <template #sideHeader v-if="!isMicroApp">
+      <img :class="[`${prefixCls}-logo`]" :src="Logo" />
+    </template>
     <template #topFooter>
       <div :class="[`${prefixCls}-locales`]" v-if="VITE_MULTIPLE_LANGUAGES === 'true'">
         <LocalePicker :showText="true" />
@@ -16,6 +19,8 @@ import { routesStoreWithOut } from "@/stores/modules/common/routes";
 import { useRouter } from "vue-router";
 import LocalePicker from "@/components/LocalePicker/index.vue";
 import { useDesign } from "@/hooks/web/useDesign";
+import microAppUtils from "@/plugins/micro-app/utils";
+const { isMicroApp } = microAppUtils;
 const { getPrefixCls } = useDesign();
 const prefixCls = getPrefixCls("layout");
 const { VITE_MULTIPLE_LANGUAGES } = import.meta.env;
@@ -34,6 +39,10 @@ const options = {
 <style scoped lang="less">
 @prefix-cls: ~"@{adminNamespace}-layout";
 .@{prefix-cls} {
+  &-logo {
+    height: 60px;
+  }
+
   &-locales {
     position: fixed;
     right: 25px;
