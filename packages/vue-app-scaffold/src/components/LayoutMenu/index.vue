@@ -39,15 +39,22 @@ const options = {
 <style scoped lang="less">
 @prefix-cls: ~"@{adminNamespace}-layout";
 .@{prefix-cls} {
+  overflow: hidden;
+
   &-logo {
     height: 60px;
   }
-
   &-locales {
     position: fixed;
     right: 25px;
     top: 25px;
     height: 20px;
+  }
+  :deep(.layout-content-main) {
+    height: 100%;
+    div {
+      height: 100%;
+    }
   }
 }
 </style>
