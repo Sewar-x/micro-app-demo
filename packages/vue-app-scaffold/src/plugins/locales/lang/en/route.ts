@@ -9,6 +9,9 @@ export default {
       权限菜单: "authMenus",
       权限菜单1: "authMenus1",
       权限菜单2: "authMenus2",
+      订单软件管理: "odf",
+      量产软件发布: "onpi",
+      试产软件发布: "pilot",
     },
   };
   

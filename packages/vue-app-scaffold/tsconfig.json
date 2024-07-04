@@ -1,10 +1,7 @@
 {
   "compileOnSave": true, //设置保存文件的时候自动编译
-  "extends": "@vue/tsconfig/tsconfig.dom.json", //引入其他配置文件，继承配置
-  "exclude": [
-    "node_modules",
-    "dist"
-  ], //指定编译器需要排除的文件或文件夹
+  // "extends": "@vue/tsconfig/tsconfig.web.json", //引入其他配置文件，继承配置
+  "exclude": ["node_modules", "dist"], //指定编译器需要排除的文件或文件夹
   "include": [
     //指定编译需要编译的文件或目录
     "src/**/*.ts",
@@ -44,21 +41,11 @@
     "skipLibCheck": true,
     "paths": {
       // 路径映射，相对于baseUrl
-      "@/*": [
-        "./src/*"
-      ],
-      "#/*": [
-        "./types/*"
-      ],
-      "$locale": [
-        "src/plugins/plugins/locales/setupLocale.ts"
-      ],
-      "$store/*": [
-        "./src/stores/modules/*"
-      ],
-      "$styleVariable": [
-        "./src/style/variable.module.less"
-      ]
+      "@/*": ["./src/*"],
+      "#/*": ["./types/*"],
+      "$locale": ["src/plugins/plugins/locales/setupLocale.ts"],
+      "$store/*": ["./src/stores/modules/*"],
+      "$styleVariable": ["./src/style/variable.module.less"]
     },
     // "suppressImplicitAnyIndexErrors": true,
     "types": [
